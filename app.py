@@ -225,7 +225,7 @@ def predict_batters(df, venue, opponent):
         )
         
         # Select required columns, handling cases where some might be missing
-        output_columns = ['batter', 'avg_runs', 'total_runs', 'strike_rate', 'predicted_score']
+        output_columns = ['batter', 'avg_runs', 'total_runs', 'strike_rate', 'predicted_score','norm_avg_runs', 'norm_recent_avg', 'norm_vs_team_avg']
         
         # Add optional columns if they exist
         if 'recent_avg' in merged.columns:
@@ -559,45 +559,27 @@ if data_loaded:
                     top_batters = predict_batters(df, pred_venue, opponent)
                     
                     if not top_batters.empty:
-                        st.success(f"Top batters predicted to perform well at {pred_venue} against {opponent}")
-                        
-                        # Display top batters
-                        st.dataframe(top_batters[['batter', 'total_runs', 'avg_runs', 'recent_avg', 
-                                                'vs_team_avg', 'strike_rate', 'predicted_score']]
-                                    .head(10))
-                        # Visualize top 5
-
-                        # Select top 5 batters including the required normalized columns
-                        top5 = top_batters.sort_values('predicted_score', ascending=False).head(5).copy()
-
-                        # Ensure required columns exist
+    ...
+    # Ensure normalized columns exist (defaults to 0 if missing)
                         for col in ['norm_avg_runs', 'norm_recent_avg', 'norm_vs_team_avg']:
                            if col not in top5.columns:
-                                top5[col] = 0
+                           top5[col] = 0
 
-                                # Plot top 5 predicted performers
-                                fig = px.bar(top5, x='batter', y='predicted_score',
-                                             title=f"Top 5 Predicted Performers at {pred_venue} vs {opponent}",
-                                             color='predicted_score', text_auto='.2f')
-                                st.plotly_chart(fig, use_container_width=True)
+    # Plot top 5 predicted performers
+                        fig = px.bar(top5, ...)
+                        st.plotly_chart(fig, use_container_width=True)
 
-                                # Factor contribution chart
-                                factor_df = pd.DataFrame({
-                                           'Batter': top5['batter'],
-                                           'Venue History': top5['norm_avg_runs'] * 0.4,
-                                           'Recent Form': top5['norm_recent_avg'] * 0.3,
-                                           'vs Opponent': top5['norm_vs_team_avg'] * 0.3
-                                }) 
+    # Factor contribution chart
+                        factor_df = pd.DataFrame({
+                             'Batter': top5['batter'],
+                            'Venue History': top5['norm_avg_runs'] * 0.4,
+                            'Recent Form': top5['norm_recent_avg'] * 0.3,
+                            'vs Opponent': top5['norm_vs_team_avg'] * 0.3
+                             })
+    ...
+            else:
+                 st.warning("Not enough data to make predictions for this venue and opponent.")
 
-                                factor_df_melted = pd.melt(factor_df, id_vars=['Batter'],
-                                                           var_name='Factor', value_name='Contribution')
-
-                                fig = px.bar(factor_df_melted, x='Batter', y='Contribution', color='Factor',
-                                             title="Factor Contribution to Prediction Score", barmode='stack')
-                                st.plotly_chart(fig, use_container_width=True)
-                       
-                           else:
-                               st.warning("Not enough data to make predictions for this venue and opponent.")
         
         with tab2:
             st.subheader("Match Strategy Recommendations")
