@@ -309,7 +309,7 @@ if data_loaded:
                 fig = px.bar(innings_data, x='Innings', y='Average Score', 
                             title=f"Innings Comparison at {selected_venue}",
                             color='Innings', text_auto='.1f')
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             # Venue profile if available
             if 'stadium_reports' in locals():
@@ -340,19 +340,19 @@ if data_loaded:
             fig = px.bar(phase_summary, x='phase', y='run_rate', 
                         title=f"Run Rate by Phase at {selected_venue}",
                         color='phase', text_auto='.2f')
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             
             col1, col2 = st.columns(2)
             
             with col1:
                 fig = px.bar(phase_summary, x='phase', y='strike_rate', 
                             title="Strike Rate by Phase", color='phase', text_auto='.1f')
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             with col2:
                 fig = px.bar(phase_summary, x='phase', y='balls_per_wicket', 
                             title="Balls per Wicket by Phase", color='phase', text_auto='.1f')
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
         
         with tab3:
             st.subheader("Toss Impact Analysis")
@@ -373,7 +373,7 @@ if data_loaded:
                     fig = px.pie(values=[venue_toss['bat_first_win_pct'].iloc[0], venue_toss['bowl_first_win_pct'].iloc[0]],
                                 names=['Bat First', 'Bowl First'],
                                 title="Match Win % by Toss Decision")
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, width='stretch')
                 
                 # Recommended strategy
                 st.subheader("Recommended Toss Strategy")
@@ -420,7 +420,7 @@ if data_loaded:
             # Plot comparison
             fig = px.bar(comparison_df, x='Metric', y=[venue1, venue2], barmode='group',
                         title=f"Venue Comparison: {venue1} vs {venue2}")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             
             # Phase comparison
             st.subheader("Phase-wise Comparison")
@@ -445,7 +445,7 @@ if data_loaded:
             fig = px.line(phase_comp, x='phase', y=[venue1, venue2], markers=True,
                          title="Run Rate by Phase Comparison", 
                          category_orders={"phase": ["Powerplay", "Middle Overs", "Death Overs"]})
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             
             # Similar venues analysis
             st.subheader("Find Similar Venues")
@@ -513,7 +513,7 @@ if data_loaded:
                         color='strike_rate', text_auto='.0f',
                         color_continuous_scale='Viridis')
             fig.update_layout(coloraxis_colorbar_title='Strike Rate')
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             
             # Strike rate vs average scatter plot
             st.subheader("Batting Efficiency Analysis")
@@ -535,7 +535,7 @@ if data_loaded:
             fig.add_annotation(x=min(player_stats['strike_rate'])*1.15, y=max(player_stats['average'])*0.85,
                             text="Low SR, High Avg<br>Anchors", showarrow=False)
             
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         else:
             st.info(f"No players found with at least {min_runs} runs at {selected_venue}")
 
@@ -580,7 +580,7 @@ if data_loaded:
                         fig = px.bar(top5, x='batter', y='predicted_score',
                                      title=f"Top 5 Predicted Performers at {pred_venue} vs {opponent}",
                                      color='predicted_score', text_auto='.2f')
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width='stretch')
 
                         # Factor contribution chart
                         factor_df = pd.DataFrame({
@@ -595,7 +595,7 @@ if data_loaded:
 
                         fig = px.bar(factor_df_melted, x='Batter', y='Contribution', color='Factor',
                                      title="Factor Contribution to Prediction Score", barmode='stack')
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width='stretch')
                     else:
                         st.warning("Not enough data to make predictions for this venue and opponent.")
         
@@ -624,7 +624,7 @@ if data_loaded:
                     fig = px.pie(values=[bat_win_pct, bowl_win_pct],
                                 names=['Bat First', 'Bowl First'],
                                 title="Match Win % by Toss Decision")
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, width='stretch')
                 
                 # Get venue summary for target scores
                 venue_summary = create_venue_summary(df)
