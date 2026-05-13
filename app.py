@@ -558,7 +558,7 @@ if data_loaded:
                 with st.spinner("Analyzing player data..."):
                     top_batters = predict_batters(df, pred_venue, opponent)
                     
-                    if not top_batters.empty:
+            if not top_batters.empty:
     ...
     # Ensure normalized columns exist (defaults to 0 if missing)
                         for col in ['norm_avg_runs', 'norm_recent_avg', 'norm_vs_team_avg']:
